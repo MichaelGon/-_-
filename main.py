@@ -3,6 +3,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton 
 from PyQt5.QtWidgets import QLabel, QLineEdit, QComboBox
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt
  
 W = 400
 H = 500
@@ -78,6 +79,23 @@ class Example(QWidget):
         self.btnm.move(m + 25, m + dMenu)
         self.btnm.clicked.connect(self.mas_minus)
         self.btnm.setDisabled(True)
+        
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_PageUp:
+            self.mas_plus()
+        if event.key() == Qt.Key_PageDown:
+            self.mas_minus()       
+        if event.key() == Qt.Key_Up:
+            dy = 180 / 2 ** (self.mas)
+            lat = float(self.lat_input.text()) + dy
+            self.lat_input.setText(str(lat)) 
+            self.show_map_file()
+        if event.key() == Qt.Key_Down:
+            dy = 180 / 2 **(self.mas)
+            lat = float(self.lat_input.text()) - dy
+            self.lat_input.setText(str(lat)) 
+            self.show_map_file()        
+            
 
     def onChanged(self, text):
         if text:
