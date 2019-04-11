@@ -29,13 +29,15 @@ def geocode(address):
 def get_coordinates(address):
     toponym = geocode(address)
     if not toponym:
-        return (None,None)
+        return (None, None, None)
     
     # Координаты центра топонима:
     toponym_coodrinates = toponym["Point"]["pos"]
     # Широта, преобразованная в плавающее число:
     toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
-    return float(toponym_longitude), float(toponym_lattitude)
+    toponym_address = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
+
+    return float(toponym_longitude), float(toponym_lattitude), toponym_address
 
 def get_spn(address):
     toponym = geocode(address)
@@ -94,7 +96,7 @@ def get_file_map(ll_spn=None, map_type="map", add_params=None):
     response = requests.get(map_request)
 
     if not response:
-        print("Error request")
+        print("Error request", map_request)
         return None
     
     #Запишем полученное изображение в файл.
